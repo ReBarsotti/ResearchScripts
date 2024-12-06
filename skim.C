@@ -10,25 +10,31 @@
         FSCut::defineCut("chi2","Chi2DOF<5");
         FSCut::defineCut("mass23", "MASS(2,3)>1.8");
 
-        FSCut::defineCut("xProton","ProdVx>=-1&&ProdVx<=1");
-        FSCut::defineCut("yProton","ProdVy>=-1&&ProdVy<=1");
-        FSCut::defineCut("zProton","ProdVz>=52&&ProdVz<=78");
+        FSCut::defineCut("xyProton","(VxP1*VxP1 + VyP1*VyP1)<=1");
+        FSCut::defineCut("zProton","VzP1>=52&&VzP1<=78");
 
-        FSCut::defineCut("rf", "OR(abs(RFDeltaT)<2.0)");
-        FSModeTree::createChi2RankingTree(INPUT,NT,"m101_1","CUT(rf,unusedE,unusedTracks,zProton,xProton,yProton)", "");
+        FSCut::defineCut("rf", "(abs(RFDeltaT)<2.0)");
+//      FSModeTree::createChi2RankingTree(INPUT,NT,"m101_1","CUT(rf,unusedE,unusedTracks)", "");
 
         FSTree::addFriendTree("Chi2Rank");
 
         FSCut::defineCut("chiRank","Chi2RankVar==Chi2RankVarBest");
 
 
-        FSCut::defineCut("eta","abs(MASS([eta])-0.548)<0.05","(abs(MASS([eta])-0.548+0.105)<0.025 || abs(MASS([eta])-0.548-0.105)<0.025)", -0.5);
-        FSCut::defineCut("pi0","abs(MASS([pi0])-0.135)<0.025","(abs(MASS([pi0])-0.135+0.04)<0.006 || abs(MASS([pi0])-0.135-0.04)<0.006)", -0.24);
+        FSCut::defineCut("eta","abs(MASS([eta])-0.548)<(0.019*3)","(abs(MASS([eta])-0.548+(0.019*5.75))<(.019*1.25) || abs(MASS([eta])-0.548-(0.019*5.75))<(0.019*1.25))", -( 3.0 / 5.0));
 
+//      FSCut::defineCut("eta","abs(MASS([eta])-0.548)<(0.019*4)","(abs(MASS([eta])-0.548+(0.019*6.25))<(.019*(1.75)) || abs(MASS([eta])-0.548-(0.019*6.25))<(0.019*1.75))", -( 4.0 / 7.0));
 
-        FSModeTree::skimTree(INPUT, NT, "", OUTPUT,"CUT(beamE,unusedE,unusedTracks,zProton,xProton, yProton,chi2,eta, pi0,chiRank)" );
+//      FSCut::defineCut("eta","abs(MASS([eta])-0.548)<(0.019*2)","(abs(MASS([eta])-0.548+(0.019*5.25))<(.019*(.75)) || abs(MASS([eta])-0.548-(0.019*5.25))<(0.019*.75))", -( 2.0 / 3.0));
 
-        FSModeTree::skimTree(INPUT,NT,"",SBOUT, "CUT(beamE,unusedE,unusedTracks,xProton,yProton,zProton,chi2,chiRank) && CUTSBWT(eta,pi0)");
+// FSCut::defineCut("pi0","abs(MASS([pi0])-0.135)<(0.0076*3)","(abs(MASS([pi0])-0.135+(0.0076*5.))<(.0076*.5) || abs(MASS([pi0])-0.135-(0.0076*5.))<(.0076*.5))", -3.0/ 2.0);
+//      FSCut::defineCut("pi0","abs(MASS([pi0])-0.135)<(0.0076*4)","(abs(MASS([pi0])-0.135+(0.0076*5.25))<(.0076*.75) || abs(MASS([pi0])-0.135-(0.0076*5.25))<(.0076*.75))", -4.0/ 3.0);
+
+ FSCut::defineCut("pi0","abs(MASS([pi0])-0.135)<(0.0076*2)","(abs(MASS([pi0])-0.135+(0.0076*4.75))<(.0076*.25) || abs(MASS([pi0])-0.135-(0.0076*4.75))<(.0076*.25))", -2.0/ 1.0);
+
+        FSModeTree::skimTree(INPUT, NT, "", OUTPUT,"CUT(beamE,unusedE,unusedTracks,zProton,xyProton,chi2,eta, pi0,chiRank)" );
+
+        FSModeTree::skimTree(INPUT,NT,"",SBOUT, "CUT(beamE,unusedE,unusedTracks,xyProton,zProton,chi2,chiRank) && CUTSBWT(eta,pi0)");
 
 
         double PxP2,PyP2,PzP2,EnP2,PxP3,PyP3,PzP3,EnP3;
@@ -51,20 +57,21 @@
         TBranch *wt = tr->Branch("weight", &weight, "weight/D");
 
         int numEvent = tr->GetEntries();
+
         for(int i=0;i<numEvent;i++){
                 tr->GetEntry(i);
                 TLorentzVector P2(PxP2,PyP2,PzP2,EnP2);
                 TLorentzVector P3(PxP3,PyP3,PzP3,EnP3);
 
 
-                if((abs(P2.M()-0.548+0.105)<0.025 || abs(P2.M()-0.548-0.105)<0.025) && (abs(P3.M()-0.135+0.04)<0.006 || abs(P3.M()-0.135-0.04)<0.006)){
-                        weight = -0.12;
+                if((abs(P2.M()-0.548+(0.019*5.75))<(.019*1.25) || abs(P2.M()-0.548-(0.019*5.75))<(.019*1.25)) && (abs(P3.M()-0.135+(0.0076*4.75))<(0.0076*0.25) || abs(P3.M()-0.135-(0.0076*4.75))<(0.0076*.25))){
+                        weight = - 6.0 / (1.0* 5.0);
                 }
-                else if((abs(P2.M()-0.548+0.105)<0.025 || abs(P2.M()-0.548-0.105)<0.025)){
-                        weight = 0.5;
+                else if((abs(P2.M()-0.548+(0.019*5.75))<(.019*1.25) || abs(P2.M()-0.548-(0.019*5.75))<(.019*1.25))){
+                        weight = 3.0 / 5.0;
                 }
-                else if((abs(P3.M()-0.135+0.04)<0.006 || abs(P3.M()-0.135-0.04)<0.006)){
-                        weight = 0.24;
+                else if((abs(P3.M()-0.135+(0.0076*4.75))<(.0076*.25) || abs(P3.M()-0.135-(0.0076*4.75))<(.0076*.25))){
+                        weight = 2.0 / 1.0;
                 }
 
                 wt->Fill();
