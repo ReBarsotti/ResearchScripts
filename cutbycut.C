@@ -10,8 +10,8 @@
 
 	FSCut::defineCut("chiRank","Chi2RankVar==Chi2RankVarBest");
 	FSCut::defineCut("chi2","Chi2DOF<5.");
-	FSCut::defineCut("pi0","abs(MASS([pi0])-0.135)<0.025","(abs(MASS([pi0])-0.135+0.04)<0.006 || abs(MASS([pi0])-0.135-0.04)<0.006)", -0.24);
-	FSCut::defineCut("eta","abs(MASS([eta])-0.548)<0.05","(abs(MASS([eta])-0.548+0.105)<0.025 || abs(MASS([eta])-0.548-0.105)<0.025)", -0.5);
+	FSCut::defineCut("pi0","abs(MASS([pi0])-0.135)<(0.0076*3)","(abs(MASS([pi0])-0.135+(0.0076*5.))<(.0076*.5) || abs(MASS([pi0])-0.135-(0.0076*5.))<(.0076*.5))", -3.0/ 2.0);
+	FSCut::defineCut("eta","abs(MASS([eta])-0.548)<(0.019*3)","(abs(MASS([eta])-0.548+(0.019*5.75))<(.019*1.25) || abs(MASS([eta])-0.548-(0.019*5.75))<(0.019*1.25))", -( 3.0 / 5.0));
 	FSCut::defineCut("rf", "abs(RFDeltaT)<2.0");
 
 	FSCut::defineCut("eventNum2", "Chi2Rank==1");
