@@ -11,8 +11,9 @@
 
 **uncertainty codes**
 - statErr.C is used to compute the statistical uncertainties. The bootstrap uncertainties are pre-computed.
+- Minor changes to the genCFG and driveFit scripts will allow you to bootstrap the fits. Gaussian fits to get the standard deviations can be scripted or performed interactively using the ROOT FitPanel.
 
 **Plotting codes**
 - plotYield.C is used to plot the yields of the different components with pre-computed statistical uncertainties
-- fullErrorAsym.C is used to plot the asymmetry "money" plot using pre-computed statistical and systematic uncertainties
+- fullErrorAsym.C is used to plot the asymmetry "money" plot using pre-computed statistical and systematic uncertainties. The scripts to determine systematic uncertainties are written poorly / inflexibly so they have been ommitted but as per the thesis, the systematic uncertainites can be obtained by taking the largest variation of the asymmetry for each systematic criteria added in quadrature.
 - ninepanel.C and genninepanel.C will produce the fit result plots show in my thesis appendix (ninepanel is the green accMC and data plots, genninepanel is the yellow genMC). The root files needed for these plotting codes can be produced using the plotResults executble
