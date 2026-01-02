@@ -7,6 +7,7 @@
 5. fit_TEMPLATE.cfg is the template for fit configuration files to be created and then fit with amptools
 6. genCFG.pl is used to create config files from the template
 7. driveFit.pl is used to actually run the fits
+8. asymmetry.C will compute the asymmetry of a fit result
 
 **uncertainty codes**
 - statErr.C is used to compute the statistical uncertainties. The bootstrap uncertainties are pre-computed.
